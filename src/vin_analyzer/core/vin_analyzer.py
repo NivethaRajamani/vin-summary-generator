@@ -20,5 +20,5 @@ class VinAnalyzer:
             anthropic_api_key: Anthropic API key (optional, can use env var)
         """
         self.data_loader = DataLoader(csv_file_path)
-        
+        self.risk_engine = RiskEngine(use_llm=use_llm, anthropic_api_key=anthropic_api_key)
 
