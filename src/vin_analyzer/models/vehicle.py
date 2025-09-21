@@ -65,3 +65,15 @@ class VehicleNotFoundError(Exception):
     """Raised when vehicle is not found in database."""
     pass
 
+
+class RiskFactors(BaseModel):
+    """Individual risk factors for transparency."""
+
+    days_on_lot_impact: int = Field(..., description="Impact from days on lot (-2 to +2)")
+    price_to_market_impact: int = Field(..., description="Impact from price to market (-2 to +2)")
+    vdp_views_impact: int = Field(..., description="Impact from VDP views (-1 to +1)")
+    mileage_impact: int = Field(..., description="Impact from mileage (-1 to +1)")
+    sales_opportunities_impact: int = Field(..., description="Impact from sales opportunities (-1 to +1)")
+    baseline_score: int = Field(default=5, description="Baseline risk score")
+    total_adjustments: int = Field(..., description="Sum of all adjustments")
+    final_score: int = Field(..., ge=1, le=10, description="Final clamped risk score")
