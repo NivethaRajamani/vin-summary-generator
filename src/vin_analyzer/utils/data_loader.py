@@ -134,4 +134,14 @@ class DataLoader:
 
         print(f"Loaded {len(self.vehicles)} vehicles from CSV")
 
+    def get_vehicle_by_vin(self, vin: str) -> VehicleData:
+        """Get vehicle data by VIN."""
+        vin = vin.strip().upper()
+
+        if vin not in self.vehicles:
+            raise VehicleNotFoundError(f"Vehicle with VIN {vin} not found")
+
+        return self.vehicles[vin]
+
+
     
