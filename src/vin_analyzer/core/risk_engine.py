@@ -148,3 +148,31 @@ class RiskEngine:
             total_adjustments=total_adjustments,
             final_score=final_score
         )
+    
+    def assess_risk(self, vehicle: VehicleData) -> RiskAssessment:
+        """Assess risk for a vehicle and return complete assessment."""
+        risk_factors = self.calculate_risk_factors(vehicle)
+
+        # Use LLM for output generation if available
+        if self.use_llm and self.llm_service:
+            try:
+                llm_output = self.llm_service.generate_risk_assessment(
+                    vehicle, risk_factors
+                )
+                return RiskAssessment(
+                    summary=llm_output["summary"],
+                    risk_score=llm_output["risk_score"],
+                    reasoning=llm_output["reasoning"]
+                )
+            except Exception as e:
+                print(f"LLM generation failed: {e}. Using fallback.")
+
+        # Fallback to algorithmic generation
+        summary = self._generate_summary(vehicle, risk_factors)
+        reasoning = self._generate_reasoning(vehicle, risk_factors)
+
+        return RiskAssessment(
+            summary=summary,
+            risk_score=risk_factors.final_score,
+            reasoning=reasoning
+        )
