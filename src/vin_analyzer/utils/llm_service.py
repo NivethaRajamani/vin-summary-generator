@@ -86,3 +86,99 @@ class LLMService:
             # Fallback to algorithmic generation if LLM fails
             print(f"LLM generation failed: {e}. Using fallback.")
             return self._generate_fallback_assessment(vehicle, risk_factors)
+        
+    def _build_prompt(self, vehicle: VehicleData, risk_factors: RiskFactors) -> str:
+        """Build the prompt for LLM generation."""
+        current_year = 2025  # Could be made dynamic
+        vehicle_age = current_year - vehicle.year
+
+        prompt = f"""
+Analyze this vehicle and provide a risk assessment in JSON format:
+
+VEHICLE DETAILS:
+- VIN: {vehicle.vin}
+- Year: {vehicle.year} {vehicle.make.title()} {vehicle.model.title()}
+- Vehicle Age: {vehicle_age} years
+- Current Price: ${vehicle.current_price:,.0f}
+- Price to Market: {vehicle.price_to_market_percent}%
+- Days on Lot: {vehicle.days_on_lot}
+- Mileage: {vehicle.mileage:,} miles
+- VDP Views: {vehicle.total_vdps:,}
+- Sales Opportunities: {vehicle.sales_opportunities}
+
+RISK FACTOR ANALYSIS:
+- Days on Lot Impact: {risk_factors.days_on_lot_impact:+d}
+- Price to Market Impact: {risk_factors.price_to_market_impact:+d}
+- VDP Views Impact: {risk_factors.vdp_views_impact:+d}
+- Mileage Impact: {risk_factors.mileage_impact:+d}
+- Sales Opportunities Impact: {risk_factors.sales_opportunities_impact:+d}
+- Total Adjustments: {risk_factors.total_adjustments:+d}
+- Calculated Risk Score: {risk_factors.final_score}
+
+SCORING RULES:
+- Days on Lot: <15 days (low risk), 15-45 days (normal), >45 days (high risk)
+- Price to Market: ≤95% (below market, good), 96-105% (at market), >105% (overpriced)
+- VDP Views: >200 (high interest), 50-200 (moderate), <50 (low interest)
+- Mileage: Below average for age (good), average (normal), above average (concerning)
+- Sales Opportunities: >10 (many), 3-10 (moderate), ≤2 (few)
+
+Generate a JSON response with:
+{{
+  "summary": "A concise, professional summary of this vehicle's market position and appeal (2-3 sentences)",
+  "risk_score": {risk_factors.final_score},
+  "reasoning": "Clear explanation of why this risk score was assigned, mentioning specific factors like days on lot, pricing, buyer interest, mileage, and sales activity"
+}}
+
+Important: Return ONLY the JSON object, no additional text.
+"""
+        return prompt.strip()
+
+    def _generate_fallback_assessment(
+        self,
+        vehicle: VehicleData,
+        risk_factors: RiskFactors
+    ) -> Dict[str, Any]:
+        """Generate fallback assessment if LLM fails."""
+        # Simple algorithmic fallback
+        year = vehicle.year
+        make = vehicle.make.title()
+        model = vehicle.model.title()
+
+        # Basic summary
+        if risk_factors.final_score <= 3:
+            risk_level = "low-risk investment"
+        elif risk_factors.final_score <= 6:
+            risk_level = "moderate market position"
+        else:
+            risk_level = "requiring attention"
+
+        summary = (
+            f"This {year} {make} {model} represents a {risk_level} "
+            f"based on current market metrics and pricing."
+        )
+
+        # Basic reasoning
+        reasoning_parts = []
+
+        if risk_factors.days_on_lot_impact != 0:
+            reasoning_parts.append(
+                f"Days on lot ({vehicle.days_on_lot}) "
+                f"{'reduces' if risk_factors.days_on_lot_impact < 0 else 'increases'} risk"
+            )
+
+        if risk_factors.price_to_market_impact != 0:
+            reasoning_parts.append(
+                f"Pricing at {vehicle.price_to_market_percent}% of market "
+                f"{'helps' if risk_factors.price_to_market_impact < 0 else 'hurts'} appeal"
+            )
+
+        reasoning = (
+            f"Risk assessment based on: {', '.join(reasoning_parts[:2])}. "
+            f"Final score: {risk_factors.final_score}/10."
+        )
+
+        return {
+            "summary": summary,
+            "risk_score": risk_factors.final_score,
+            "reasoning": reasoning
+        }
