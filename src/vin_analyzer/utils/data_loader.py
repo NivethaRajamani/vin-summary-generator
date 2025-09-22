@@ -143,5 +143,30 @@ class DataLoader:
 
         return self.vehicles[vin]
 
-
+    def get_all_vehicles(self) -> List[VehicleData]:
+        """Get all loaded vehicles."""
+        return list(self.vehicles.values())
     
+    def get_vehicles_by_make(self, make: str) -> List[VehicleData]:
+        """Get vehicles by manufacturer."""
+        make = make.strip().upper()
+        return [v for v in self.vehicles.values() if v.make == make]
+
+    def get_vehicles_by_year(self, year: int) -> List[VehicleData]:
+        """Get vehicles by model year."""
+        return [v for v in self.vehicles.values() if v.year == year]
+
+    def calculate_average_mileage_for_age(self, vehicle_age: int) -> float:
+        """Calculate average mileage for vehicles of a given age."""
+        vehicles_of_age = [v for v in self.vehicles.values()
+                          if (2025 - v.year) == vehicle_age and v.mileage > 0]
+
+        if not vehicles_of_age:
+            return 12000.0 * vehicle_age  # Default assumption
+
+        total_mileage = sum(v.mileage for v in vehicles_of_age)
+        return total_mileage / len(vehicles_of_age)
+
+    def get_vehicle_count(self) -> int:
+        """Get total number of loaded vehicles."""
+        return len(self.vehicles)
