@@ -149,6 +149,150 @@ class RiskEngine:
             final_score=final_score
         )
     
+    def _generate_summary(self, vehicle: VehicleData, risk_factors: RiskFactors) -> str:
+        """Generate human-readable summary of vehicle's market position."""
+        year = vehicle.year
+        make = vehicle.make.title()
+        model = vehicle.model.title()
+
+        # Price analysis
+        price_desc = ""
+        if vehicle.current_price > 0:
+            if vehicle.price_to_market_percent > 105:
+                price_desc = "priced above market value"
+            elif vehicle.price_to_market_percent < 95:
+                price_desc = "priced below market value"
+            else:
+                price_desc = "competitively priced"
+        else:
+            price_desc = "with pricing to be determined"
+
+        # Engagement analysis
+        engagement_desc = ""
+        if vehicle.total_vdps > 200:
+            engagement_desc = "strong online engagement"
+        elif vehicle.total_vdps >= 50:
+            engagement_desc = "moderate online interest"
+        else:
+            engagement_desc = "limited online visibility"
+
+        # Days on lot analysis
+        lot_desc = ""
+        if vehicle.days_on_lot < 15:
+            lot_desc = "recently listed"
+        elif vehicle.days_on_lot <= 45:
+            lot_desc = "with normal inventory time"
+        else:
+            lot_desc = "with extended time on lot"
+
+        # Risk level description
+        risk_level = ""
+        if risk_factors.final_score <= 3:
+            risk_level = "low risk investment"
+        elif risk_factors.final_score <= 6:
+            risk_level = "moderate market position"
+        else:
+            risk_level = "requiring attention"
+
+        return (
+            f"This {year} {make} {model} is {price_desc} and shows {engagement_desc}, "
+            f"{lot_desc}, indicating a {risk_level}."
+        )
+
+    def _generate_reasoning(
+        self, vehicle: VehicleData, risk_factors: RiskFactors
+    ) -> str:
+        """Generate detailed reasoning for the risk score."""
+        reasoning_parts = []
+
+        # Days on lot reasoning
+        if vehicle.days_on_lot < 15:
+            reasoning_parts.append(
+                f"Days on lot ({vehicle.days_on_lot}) is low "
+                f"({risk_factors.days_on_lot_impact:+d})"
+            )
+        elif vehicle.days_on_lot <= 45:
+            reasoning_parts.append(f"Days on lot ({vehicle.days_on_lot}) is normal (0)")
+        else:
+            reasoning_parts.append(
+                f"Days on lot ({vehicle.days_on_lot}) is high "
+                f"({risk_factors.days_on_lot_impact:+d})"
+            )
+
+        # Price to market reasoning
+        if vehicle.price_to_market_percent > 0:
+            if vehicle.price_to_market_percent <= 95:
+                reasoning_parts.append(
+                    f"Price is {vehicle.price_to_market_percent}% of market "
+                    f"({risk_factors.price_to_market_impact:+d})"
+                )
+            elif vehicle.price_to_market_percent <= 105:
+                reasoning_parts.append(
+                    f"Price is {vehicle.price_to_market_percent}% of market (0)"
+                )
+            else:
+                reasoning_parts.append(
+                    f"Price is {vehicle.price_to_market_percent}% of market "
+                    f"({risk_factors.price_to_market_impact:+d})"
+                )
+        else:
+            reasoning_parts.append("Price to market data unavailable")
+
+        # VDP views reasoning
+        if vehicle.total_vdps > 200:
+            reasoning_parts.append(
+                f"VDP views ({vehicle.total_vdps:,}) are high "
+                f"({risk_factors.vdp_views_impact:+d})"
+            )
+        elif vehicle.total_vdps >= 50:
+            reasoning_parts.append(
+                f"VDP views ({vehicle.total_vdps:,}) are moderate (0)"
+            )
+        else:
+            reasoning_parts.append(
+                f"VDP views ({vehicle.total_vdps:,}) are low "
+                f"({risk_factors.vdp_views_impact:+d})"
+            )
+
+        # Mileage reasoning
+        current_year = datetime.now().year
+        vehicle_age = current_year - vehicle.year
+        if vehicle.mileage == 0:
+            reasoning_parts.append(
+                f"New vehicle with 0 miles ({risk_factors.mileage_impact:+d})"
+            )
+        else:
+            expected_mileage = self.AVERAGE_MILES_PER_YEAR * vehicle_age
+            reasoning_parts.append(
+                f"Mileage ({vehicle.mileage:,}) vs expected "
+                f"({expected_mileage:,}) for age ({risk_factors.mileage_impact:+d})"
+            )
+
+        # Sales opportunities reasoning
+        if vehicle.sales_opportunities > 10:
+            reasoning_parts.append(
+                f"Sales opportunities ({vehicle.sales_opportunities}) are high "
+                f"({risk_factors.sales_opportunities_impact:+d})"
+            )
+        elif vehicle.sales_opportunities <= 2:
+            reasoning_parts.append(
+                f"Sales opportunities ({vehicle.sales_opportunities}) are low "
+                f"({risk_factors.sales_opportunities_impact:+d})"
+            )
+        else:
+            reasoning_parts.append(
+                f"Sales opportunities ({vehicle.sales_opportunities}) are moderate (0)"
+            )
+
+        # Final calculation
+        final_part = (
+            f"Overall score = {risk_factors.baseline_score} baseline "
+            f"{risk_factors.total_adjustments:+d} adjustments = "
+            f"{risk_factors.final_score}"
+        )
+
+        return ". ".join(reasoning_parts) + f". {final_part}."
+
     def assess_risk(self, vehicle: VehicleData) -> RiskAssessment:
         """Assess risk for a vehicle and return complete assessment."""
         risk_factors = self.calculate_risk_factors(vehicle)
