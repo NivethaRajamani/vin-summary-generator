@@ -60,7 +60,47 @@ class VehicleData(BaseModel):
         return v
 
 
+class RiskAssessment(BaseModel):
+    """Risk assessment result model."""
 
+    summary: str = Field(
+        ..., description="Human-readable summary of vehicle's market position"
+    )
+    risk_score: int = Field(
+        ..., ge=1, le=10, description="Risk score from 1 (low) to 10 (high)"
+    )
+    reasoning: str = Field(..., description="Explanation of risk score calculation")
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "summary": "This 2018 Honda Accord is priced slightly above market value but shows strong online engagement, indicating healthy buyer interest despite moderate days on lot.",
+                "risk_score": 4,
+                "reasoning": "Days on lot (25) is within normal range (neutral). Price is 5% above market (+2). VDP views are high (-1). Mileage is below average (-1). Overall score = 5 baseline +0 (days_on_lot) +2 (price_to_market) -1 (views) -1 (mileage) = 5, clamped to 4 for lower risk indication."
+            }
+        }
+
+
+class VinRequest(BaseModel):
+    """VIN analysis request model."""
+
+    vin: str = Field(..., description="Vehicle Identification Number to analyze")
+
+    @field_validator('vin')
+    def validate_vin(cls, v):
+        """Validate VIN format."""
+        if not v or len(v.strip()) != 17:
+            raise ValueError('VIN must be exactly 17 characters')
+        return v.strip().upper()
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "vin": "1HGCM82633A123456"
+            }
+        }
+
+        
 class VehicleNotFoundError(Exception):
     """Raised when vehicle is not found in database."""
     pass
