@@ -182,3 +182,15 @@ Important: Return ONLY the JSON object, no additional text.
             "risk_score": risk_factors.final_score,
             "reasoning": reasoning
         }
+    
+    def test_connection(self) -> bool:
+        """Test if Anthropic API connection is working."""
+        try:
+            response = self.client.messages.create(
+                model=self.model,
+                max_tokens=10,
+                messages=[{"role": "user", "content": "Hello"}]
+            )
+            return True
+        except Exception:
+            return False
