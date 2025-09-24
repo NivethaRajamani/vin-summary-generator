@@ -55,7 +55,7 @@ For detailed architecture diagrams, see [ARCHITECTURE_DIAGRAM.md](./ARCHITECTURE
 1. **Clone the repository**:
    ```bash
    git clone <repository-url>
-   cd niv-vin-extractor
+   cd vin-summary-generator
    ```
 
 2. **Create virtual environment**:
