@@ -1,12 +1,10 @@
 # vin-summary-generator
 
-## VIN Risk Analyzer
-
 A RESTful API service for analyzing Vehicle Identification Numbers (VINs) and assessing market risk using intelligent algorithms and AI-powered natural language generation.
 
 ## Overview
 
-The VIN Risk Analyzer processes vehicle data from CSV files and provides comprehensive risk assessments based on multiple market factors. The system uses a weighted scoring algorithm combined with Anthropic Claude 4.0 Sonnet for generating human-readable summaries and detailed reasoning.
+The VIN Summary Generator processes vehicle data from CSV files and provides comprehensive risk assessments based on multiple market factors. The system uses a weighted scoring algorithm combined with Anthropic Claude 4.0 Sonnet for generating human-readable summaries and detailed reasoning.
 
 ## Key Features
 
