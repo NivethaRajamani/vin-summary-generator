@@ -127,23 +127,7 @@ For detailed architecture diagrams, see [ARCHITECTURE_DIAGRAM.md](./ARCHITECTURE
    ```bash
    docker-compose down
    ```
-## Data Format
-
-The API expects vehicle data in CSV format with the following columns:
-
-| Column | Description | Example |
-|--------|-------------|---------|
-| VIN | Vehicle Identification Number | `1HGCM82633A123456` |
-| Year | Model year | `2018` |
-| Make | Vehicle manufacturer | `HONDA` |
-| Model | Vehicle model | `ACCORD` |
-| Current price | Current price in USD | `$25,000` |
-| Current price to market % | Price to market percentage | `95%` |
-| DOL | Days on lot | `25` |
-| Mileage | Vehicle mileage | `50,000` |
-| Total VDPs (lifetime) | Total VDP views | `150` |
-| Total sales opportunities (lifetime) | Sales opportunities | `5` |
-
+   
 ## API Endpoints
 
 ### Base URL
@@ -371,6 +355,23 @@ black src/ tests/
 - Integration tests for API endpoints
 - Mock testing for external services
 - Error condition testing
+
+## Data Format
+
+The API expects vehicle data in CSV format with the following columns:
+
+| Column | Description | Example |
+|--------|-------------|---------|
+| VIN | Vehicle Identification Number | `1HGCM82633A123456` |
+| Year | Model year | `2018` |
+| Make | Vehicle manufacturer | `HONDA` |
+| Model | Vehicle model | `ACCORD` |
+| Current price | Current price in USD | `$25,000` |
+| Current price to market % | Price to market percentage | `95%` |
+| DOL | Days on lot | `25` |
+| Mileage | Vehicle mileage | `50,000` |
+| Total VDPs (lifetime) | Total VDP views | `150` |
+| Total sales opportunities (lifetime) | Sales opportunities | `5` |
 
 
 ## Risk Scoring Algorithm
