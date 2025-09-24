@@ -193,7 +193,7 @@ Check if a VIN exists in the database.
 <img width="618" height="470" alt="image" src="https://github.com/user-attachments/assets/ac30a73e-5bef-4eaa-8264-b0960956f8e0" />
 <img width="580" height="296" alt="image" src="https://github.com/user-attachments/assets/e74449cc-26f7-406b-a063-d6cc1d3fe4a1" />
 
-
+<br>
 <img width="336" height="216" alt="image" src="https://github.com/user-attachments/assets/f30fd29a-a153-4e63-82f8-6f2a8096df1f" />
 <img width="537" height="306" alt="image" src="https://github.com/user-attachments/assets/63428281-0504-40a4-aa64-ed02ffbaff05" />
 
@@ -217,9 +217,10 @@ Check service health and get database statistics.
 }
 ```
 <img width="495" height="256" alt="image" src="https://github.com/user-attachments/assets/3067c1f6-5010-457d-97ca-c06129681f38" />
+<br>
 
 <img width="564" height="705" alt="image" src="https://github.com/user-attachments/assets/2063d9f2-3302-4793-aa36-9bc2f3d0d390" />
-
+<br>
 <img width="403" height="256" alt="image" src="https://github.com/user-attachments/assets/c65dc0a8-b9a5-45e7-95a1-9dca4d57cdb9" />
 
 
