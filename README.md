@@ -54,7 +54,7 @@ For detailed architecture diagrams, see [ARCHITECTURE_DIAGRAM.md](./ARCHITECTURE
 
 1. **Clone the repository**:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/NivethaRajamani/vin-summary-generator.git
    cd vin-summary-generator
    ```
 
