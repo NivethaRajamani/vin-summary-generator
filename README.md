@@ -385,15 +385,15 @@ The system uses a weighted scoring algorithm with the following factors:
 1. **Days on Lot (DOL)**:
    - < 15 days: -2 (reduces risk)
    - 15-45 days: 0 (neutral)
-   - > 45 days: +2 (increases risk)
+   - \> 45 days: +2 (increases risk)
 
 2. **Price to Market (%)**:
    - ≤ 95%: -2 (below market, positive)
    - 96%-105%: 0 (at market, neutral)
-   - > 105%: +2 (overpriced, negative)
+   - \> 105%: +2 (overpriced, negative)
 
 3. **VDP Views**:
-   - > 200: -1 (high engagement, reduces risk)
+   - \> 200: -1 (high engagement, reduces risk)
    - 50-200: 0 (moderate engagement, neutral)
    - < 50: +1 (low engagement, increases risk)
 
@@ -404,7 +404,7 @@ The system uses a weighted scoring algorithm with the following factors:
    - New vehicle (0 miles): -1 (reduces risk)
 
 5. **Sales Opportunities**:
-   - > 10: -1 (many opportunities, reduces risk)
+   - \> 10: -1 (many opportunities, reduces risk)
    - 3-10: 0 (moderate opportunities, neutral)
    - ≤ 2: +1 (few opportunities, increases risk)
 
