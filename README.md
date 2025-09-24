@@ -46,6 +46,10 @@ The system follows a layered architecture pattern:
 ├── Data Layer (CSV processing and models)
 └── External Services (Anthropic Claude integration)
 ```
+<br>
+<img width="1600" height="492" alt="image" src="https://github.com/user-attachments/assets/373e409b-9150-4148-b7ad-94309d13c5a0" />
+<br>
+
 For detailed architecture diagrams, see [ARCHITECTURE_DIAGRAM.md](./ARCHITECTURE_DIAGRAM.md).
 
 ## Installation
