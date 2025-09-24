@@ -46,6 +46,10 @@ The system follows a layered architecture pattern:
 ├── Data Layer (CSV processing and models)
 └── External Services (Anthropic Claude integration)
 ```
+<br>
+<img width="1600" height="492" alt="image" src="https://github.com/user-attachments/assets/373e409b-9150-4148-b7ad-94309d13c5a0" />
+<br>
+
 For detailed architecture diagrams, see [ARCHITECTURE_DIAGRAM.md](./ARCHITECTURE_DIAGRAM.md).
 
 ## Installation
@@ -93,12 +97,17 @@ For detailed architecture diagrams, see [ARCHITECTURE_DIAGRAM.md](./ARCHITECTURE
 
 1. **Build the Docker image**:
    ```bash
-   docker build -t vin-analyzer .
+   docker build -t vin-summary-generator .
    ```
 
 2. **Run the container**:
    ```bash
-   docker run -p 8000:8000 -e ANTHROPIC_API_KEY=your_api_key_here vin-analyzer
+   docker run -p 8000:8000 -e ANTHROPIC_API_KEY=your_api_key_here vin-summary-generator
+   ```
+   or
+   **Run the container using environment variables from your `.env` file**:
+   ```bash
+   docker run -p 8000:8000 --env-file .env vin-summary-generator
    ```
 
 ### Docker Compose
@@ -165,6 +174,11 @@ Analyze a VIN and get risk assessment.
 }
 ```
 
+<img width="783" height="484" alt="image" src="https://github.com/user-attachments/assets/4e7a1422-fd50-4dae-b16a-28b52f6f3fcb" />
+
+<img width="1753" height="386" alt="image" src="https://github.com/user-attachments/assets/5d1b4169-bc7d-4979-b50a-076f0a505c8f" />
+
+
 #### 2. Validate VIN
 **POST** `/api/v1/validate`
 
@@ -185,6 +199,13 @@ Check if a VIN exists in the database.
   "message": "VIN found in database"
 }
 ```
+<img width="618" height="470" alt="image" src="https://github.com/user-attachments/assets/ac30a73e-5bef-4eaa-8264-b0960956f8e0" />
+<img width="580" height="296" alt="image" src="https://github.com/user-attachments/assets/e74449cc-26f7-406b-a063-d6cc1d3fe4a1" />
+
+<br>
+<img width="336" height="216" alt="image" src="https://github.com/user-attachments/assets/f30fd29a-a153-4e63-82f8-6f2a8096df1f" />
+<img width="537" height="306" alt="image" src="https://github.com/user-attachments/assets/63428281-0504-40a4-aa64-ed02ffbaff05" />
+
 
 #### 3. Health Check
 **GET** `/api/v1/health`
@@ -204,6 +225,13 @@ Check service health and get database statistics.
   }
 }
 ```
+<img width="495" height="256" alt="image" src="https://github.com/user-attachments/assets/3067c1f6-5010-457d-97ca-c06129681f38" />
+<br>
+
+<img width="564" height="705" alt="image" src="https://github.com/user-attachments/assets/2063d9f2-3302-4793-aa36-9bc2f3d0d390" />
+<br>
+<img width="403" height="256" alt="image" src="https://github.com/user-attachments/assets/c65dc0a8-b9a5-45e7-95a1-9dca4d57cdb9" />
+
 
 #### 4. Database Statistics
 **GET** `/api/v1/stats`
@@ -222,6 +250,12 @@ Get detailed database statistics.
   "message": "Database statistics retrieved successfully"
 }
 ```
+
+<img width="469" height="274" alt="image" src="https://github.com/user-attachments/assets/f71764c7-73e3-4d3e-a959-96ca752948bc" />
+
+<img width="740" height="595" alt="image" src="https://github.com/user-attachments/assets/b0f47978-ba11-446c-8afb-2b656b09dbcc" />
+<img width="645" height="236" alt="image" src="https://github.com/user-attachments/assets/1175ad30-d27f-4fa8-ac2e-f4bb8d2a4f40" />
+
 
 ## Usage Examples
 
