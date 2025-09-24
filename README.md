@@ -97,12 +97,17 @@ For detailed architecture diagrams, see [ARCHITECTURE_DIAGRAM.md](./ARCHITECTURE
 
 1. **Build the Docker image**:
    ```bash
-   docker build -t vin-analyzer .
+   docker build -t vin-summary-generator .
    ```
 
 2. **Run the container**:
    ```bash
-   docker run -p 8000:8000 -e ANTHROPIC_API_KEY=your_api_key_here vin-analyzer
+   docker run -p 8000:8000 -e ANTHROPIC_API_KEY=your_api_key_here vin-summary-generator
+   ```
+   or
+   **Run the container using environment variables from your `.env` file**:
+   ```bash
+   docker run -p 8000:8000 --env-file .env vin-summary-generator
    ```
 
 ### Docker Compose
