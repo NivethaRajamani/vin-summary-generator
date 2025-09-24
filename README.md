@@ -149,21 +149,10 @@ http://localhost:8000
 
 Analyze a VIN and get risk assessment.
 
-**Request Body**:
-```json
-{
-  "vin": "1HGCM82633A123456"
-}
-```
+<img width="783" height="484" alt="image" src="https://github.com/user-attachments/assets/4e7a1422-fd50-4dae-b16a-28b52f6f3fcb" />
 
-**Response**:
-```json
-{
-  "summary": "This 2018 Honda Accord is priced slightly above market value but shows strong online engagement, indicating healthy buyer interest despite moderate days on lot.",
-  "risk_score": 4,
-  "reasoning": "Days on lot (25) is within normal range (neutral). Price is 5% above market (+2). VDP views are high (-1). Mileage is below average (-1). Overall score = 5 baseline +0 (days_on_lot) +2 (price_to_market) -1 (views) -1 (mileage) = 4."
-}
-```
+<img width="1753" height="386" alt="image" src="https://github.com/user-attachments/assets/5d1b4169-bc7d-4979-b50a-076f0a505c8f" />
+
 
 #### 2. Validate VIN
 **POST** `/api/v1/validate`
