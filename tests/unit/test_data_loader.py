@@ -18,47 +18,47 @@ class TestDataLoader:
         """Create sample CSV data for testing."""
         return [
             {
-                'VIN': '1HGCM82633A123456',
-                'Year': '2018',
-                'Make': 'HONDA',
-                'Model': 'ACCORD',
-                'Current price': '$25,000',
-                'Current price to market %': '95%',
-                'DOL': '25',
-                'Mileage': '50,000',
-                'Total VDPs (lifetime)': '150',
-                'Total sales opportunities (lifetime)': '5'
+                "VIN": "1HGCM82633A123456",
+                "Year": "2018",
+                "Make": "HONDA",
+                "Model": "ACCORD",
+                "Current price": "$25,000",
+                "Current price to market %": "95%",
+                "DOL": "25",
+                "Mileage": "50,000",
+                "Total VDPs (lifetime)": "150",
+                "Total sales opportunities (lifetime)": "5",
             },
             {
-                'VIN': '2HGCM82633A123457',
-                'Year': '2019',
-                'Make': 'TOYOTA',
-                'Model': 'CAMRY',
-                'Current price': '$30,500',
-                'Current price to market %': '105%',
-                'DOL': '45',
-                'Mileage': '30,000',
-                'Total VDPs (lifetime)': '75',
-                'Total sales opportunities (lifetime)': '2'
+                "VIN": "2HGCM82633A123457",
+                "Year": "2019",
+                "Make": "TOYOTA",
+                "Model": "CAMRY",
+                "Current price": "$30,500",
+                "Current price to market %": "105%",
+                "DOL": "45",
+                "Mileage": "30,000",
+                "Total VDPs (lifetime)": "75",
+                "Total sales opportunities (lifetime)": "2",
             },
             {
-                'VIN': '3HGCM82633A123458',
-                'Year': '2020',
-                'Make': 'NISSAN',
-                'Model': 'ALTIMA',
-                'Current price': '$0',
-                'Current price to market %': '0%',
-                'DOL': '100',
-                'Mileage': '0',
-                'Total VDPs (lifetime)': '0',
-                'Total sales opportunities (lifetime)': '0'
-            }
+                "VIN": "3HGCM82633A123458",
+                "Year": "2020",
+                "Make": "NISSAN",
+                "Model": "ALTIMA",
+                "Current price": "$0",
+                "Current price to market %": "0%",
+                "DOL": "100",
+                "Mileage": "0",
+                "Total VDPs (lifetime)": "0",
+                "Total sales opportunities (lifetime)": "0",
+            },
         ]
 
     @pytest.fixture
     def temp_csv_file(self, sample_csv_data):
         """Create temporary CSV file for testing."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
             fieldnames = sample_csv_data[0].keys()
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
@@ -156,7 +156,7 @@ class TestDataLoader:
         vehicles = loader.get_all_vehicles()
 
         assert len(vehicles) == 3
-        assert all(hasattr(v, 'vin') for v in vehicles)
+        assert all(hasattr(v, "vin") for v in vehicles)
 
     def test_get_vehicles_by_make(self, temp_csv_file):
         """Test getting vehicles by make."""
@@ -210,24 +210,24 @@ class TestDataLoader:
 
         # Test row with missing VIN
         invalid_row = {
-            'VIN': '',
-            'Year': '2018',
-            'Make': 'HONDA',
-            'Model': 'ACCORD',
-            'Current price': '$25,000',
-            'Current price to market %': '95%',
-            'DOL': '25',
-            'Mileage': '50,000',
-            'Total VDPs (lifetime)': '150',
-            'Total sales opportunities (lifetime)': '5'
+            "VIN": "",
+            "Year": "2018",
+            "Make": "HONDA",
+            "Model": "ACCORD",
+            "Current price": "$25,000",
+            "Current price to market %": "95%",
+            "DOL": "25",
+            "Mileage": "50,000",
+            "Total VDPs (lifetime)": "150",
+            "Total sales opportunities (lifetime)": "5",
         }
 
         result = loader._parse_row(invalid_row)
         assert result is None
 
         # Test row with missing year
-        invalid_row['VIN'] = '1HGCM82633A123456'
-        invalid_row['Year'] = ''
+        invalid_row["VIN"] = "1HGCM82633A123456"
+        invalid_row["Year"] = ""
 
         result = loader._parse_row(invalid_row)
         assert result is None

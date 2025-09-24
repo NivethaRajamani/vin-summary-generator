@@ -17,32 +17,44 @@ async def lifespan(app: FastAPI):
     # Startup
     try:
         # Get configuration from environment
-        anthropic_api_key = os.getenv('ANTHROPIC_API_KEY')
-        use_llm = os.getenv('USE_LLM', 'true').lower() == 'true'
+        anthropic_api_key = os.getenv("ANTHROPIC_API_KEY")
+        use_llm = os.getenv("USE_LLM", "true").lower() == "true"
 
         # Try to find sample_data.csv file
-        csv_path = os.getenv('CSV_DATA_PATH')
+        csv_path = os.getenv("CSV_DATA_PATH")
         if csv_path and Path(csv_path).exists():
-            analyzer = VinAnalyzer(csv_path, use_llm=use_llm, anthropic_api_key=anthropic_api_key)
+            analyzer = VinAnalyzer(
+                csv_path, use_llm=use_llm, anthropic_api_key=anthropic_api_key
+            )
         else:
             # Try to find sample_data.csv in project root
             current_path = Path(__file__).parent
             while current_path.parent != current_path:
                 sample_data_path = current_path / "sample_data.csv"
                 if sample_data_path.exists():
-                    analyzer = VinAnalyzer(str(sample_data_path), use_llm=use_llm, anthropic_api_key=anthropic_api_key)
+                    analyzer = VinAnalyzer(
+                        str(sample_data_path),
+                        use_llm=use_llm,
+                        anthropic_api_key=anthropic_api_key,
+                    )
                     break
                 current_path = current_path.parent
             else:
                 # Fallback to relative path
                 sample_data_path = Path("sample_data.csv")
                 if sample_data_path.exists():
-                    analyzer = VinAnalyzer(str(sample_data_path), use_llm=use_llm, anthropic_api_key=anthropic_api_key)
+                    analyzer = VinAnalyzer(
+                        str(sample_data_path),
+                        use_llm=use_llm,
+                        anthropic_api_key=anthropic_api_key,
+                    )
                 else:
                     raise FileNotFoundError("Could not find sample_data.csv file")
 
         set_analyzer(analyzer)
-        print(f"Loaded {analyzer.get_database_stats()['total_vehicles']} vehicles from CSV")
+        print(
+            f"Loaded {analyzer.get_database_stats()['total_vehicles']} vehicles from CSV"
+        )
 
     except Exception as e:
         print(f"Error initializing analyzer: {e}")
@@ -84,7 +96,7 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
 )
 
 # Add CORS middleware
@@ -112,8 +124,8 @@ async def root():
             "analyze": "POST /api/v1/analyze",
             "validate": "POST /api/v1/validate",
             "stats": "GET /api/v1/stats",
-            "health": "GET /api/v1/health"
-        }
+            "health": "GET /api/v1/health",
+        },
     }
 
 
@@ -131,5 +143,5 @@ if __name__ == "__main__":
         host=host,
         port=port,
         reload=reload,
-        log_level="info"
+        log_level="info",
     )

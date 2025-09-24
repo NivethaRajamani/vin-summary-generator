@@ -20,31 +20,31 @@ class DataLoader:
 
     def _clean_price(self, price_str: str) -> Decimal:
         """Clean and convert price string to Decimal."""
-        if not price_str or price_str.strip() in ['$0', '0', '-', '']:
-            return Decimal('0')
+        if not price_str or price_str.strip() in ["$0", "0", "-", ""]:
+            return Decimal("0")
 
         # Remove currency symbols, commas, and whitespace
-        cleaned = re.sub(r'[$,\s]', '', price_str.strip())
+        cleaned = re.sub(r"[$,\s]", "", price_str.strip())
 
         # Handle empty or invalid values
-        if not cleaned or cleaned == '0':
-            return Decimal('0')
+        if not cleaned or cleaned == "0":
+            return Decimal("0")
 
         try:
             return Decimal(cleaned)
         except Exception:
-            return Decimal('0')
+            return Decimal("0")
 
     def _clean_percentage(self, percent_str: str) -> float:
         """Clean and convert percentage string to float."""
-        if not percent_str or percent_str.strip() in ['-', '', '0%']:
+        if not percent_str or percent_str.strip() in ["-", "", "0%"]:
             return 0.0
 
         # Remove % symbol and whitespace
-        cleaned = percent_str.strip().replace('%', '')
+        cleaned = percent_str.strip().replace("%", "")
 
         # Handle empty or invalid values
-        if not cleaned or cleaned == '0':
+        if not cleaned or cleaned == "0":
             return 0.0
 
         try:
@@ -54,11 +54,11 @@ class DataLoader:
 
     def _clean_integer(self, int_str: str) -> int:
         """Clean and convert string to integer."""
-        if not int_str or int_str.strip() in ['-', '', '0']:
+        if not int_str or int_str.strip() in ["-", "", "0"]:
             return 0
 
         # Remove commas and whitespace
-        cleaned = re.sub(r'[,\s]', '', int_str.strip())
+        cleaned = re.sub(r"[,\s]", "", int_str.strip())
 
         # Handle empty or invalid values
         if not cleaned:
@@ -73,31 +73,29 @@ class DataLoader:
         """Parse a single CSV row into VehicleData."""
         try:
             # Handle different possible column names
-            vin = row.get('VIN', '').strip()
+            vin = row.get("VIN", "").strip()
             if not vin:
                 return None
 
-            year = self._clean_integer(row.get('Year', '0'))
+            year = self._clean_integer(row.get("Year", "0"))
             if year == 0:
                 return None
 
-            make = row.get('Make', '').strip().upper()
-            model = row.get('Model', '').strip().upper()
+            make = row.get("Make", "").strip().upper()
+            model = row.get("Model", "").strip().upper()
 
             if not make or not model:
                 return None
 
-            current_price = self._clean_price(row.get('Current price', ''))
+            current_price = self._clean_price(row.get("Current price", ""))
             price_to_market_percent = self._clean_percentage(
-                row.get('Current price to market %', '0%')
+                row.get("Current price to market %", "0%")
             )
-            days_on_lot = self._clean_integer(row.get('DOL', '0'))
-            mileage = self._clean_integer(row.get('Mileage', '0'))
-            total_vdps = self._clean_integer(
-                row.get('Total VDPs (lifetime)', '0')
-            )
+            days_on_lot = self._clean_integer(row.get("DOL", "0"))
+            mileage = self._clean_integer(row.get("Mileage", "0"))
+            total_vdps = self._clean_integer(row.get("Total VDPs (lifetime)", "0"))
             sales_opportunities = self._clean_integer(
-                row.get('Total sales opportunities (lifetime)', '0')
+                row.get("Total sales opportunities (lifetime)", "0")
             )
 
             return VehicleData(
@@ -110,7 +108,7 @@ class DataLoader:
                 days_on_lot=days_on_lot,
                 mileage=mileage,
                 total_vdps=total_vdps,
-                sales_opportunities=sales_opportunities
+                sales_opportunities=sales_opportunities,
             )
 
         except Exception as e:
@@ -122,7 +120,7 @@ class DataLoader:
         if not self.csv_file_path.exists():
             raise FileNotFoundError(f"CSV file not found: {self.csv_file_path}")
 
-        with open(self.csv_file_path, 'r', encoding='utf-8') as file:
+        with open(self.csv_file_path, "r", encoding="utf-8") as file:
             reader = csv.DictReader(file)
 
             for row_num, row in enumerate(reader, start=2):  # Start at 2 for header
@@ -146,7 +144,7 @@ class DataLoader:
     def get_all_vehicles(self) -> List[VehicleData]:
         """Get all loaded vehicles."""
         return list(self.vehicles.values())
-    
+
     def get_vehicles_by_make(self, make: str) -> List[VehicleData]:
         """Get vehicles by manufacturer."""
         make = make.strip().upper()
@@ -158,8 +156,11 @@ class DataLoader:
 
     def calculate_average_mileage_for_age(self, vehicle_age: int) -> float:
         """Calculate average mileage for vehicles of a given age."""
-        vehicles_of_age = [v for v in self.vehicles.values()
-                          if (2025 - v.year) == vehicle_age and v.mileage > 0]
+        vehicles_of_age = [
+            v
+            for v in self.vehicles.values()
+            if (2025 - v.year) == vehicle_age and v.mileage > 0
+        ]
 
         if not vehicles_of_age:
             return 12000.0 * vehicle_age  # Default assumption

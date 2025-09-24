@@ -9,7 +9,7 @@ from src.vin_analyzer.models.vehicle import (
     RiskAssessment,
     VinRequest,
     RiskFactors,
-    VehicleNotFoundError
+    VehicleNotFoundError,
 )
 
 
@@ -28,7 +28,7 @@ class TestVehicleData:
             days_on_lot=25,
             mileage=50000,
             total_vdps=150,
-            sales_opportunities=5
+            sales_opportunities=5,
         )
 
         assert vehicle.vin == "1HGCM82633A123456"
@@ -54,7 +54,7 @@ class TestVehicleData:
             days_on_lot=25,
             mileage=50000,
             total_vdps=150,
-            sales_opportunities=5
+            sales_opportunities=5,
         )
 
         assert vehicle.vin == "1HGCM82633A123456"
@@ -72,7 +72,7 @@ class TestVehicleData:
                 days_on_lot=25,
                 mileage=50000,
                 total_vdps=150,
-                sales_opportunities=5
+                sales_opportunities=5,
             )
 
         assert "VIN must be exactly 17 characters" in str(exc_info.value)
@@ -91,7 +91,7 @@ class TestVehicleData:
                 days_on_lot=25,
                 mileage=50000,
                 total_vdps=150,
-                sales_opportunities=5
+                sales_opportunities=5,
             )
 
         assert "Year must be between 1980 and 2030" in str(exc_info.value)
@@ -108,7 +108,7 @@ class TestVehicleData:
                 days_on_lot=25,
                 mileage=50000,
                 total_vdps=150,
-                sales_opportunities=5
+                sales_opportunities=5,
             )
 
         assert "Year must be between 1980 and 2030" in str(exc_info.value)
@@ -126,7 +126,7 @@ class TestVehicleData:
                 days_on_lot=25,
                 mileage=50000,
                 total_vdps=150,
-                sales_opportunities=5
+                sales_opportunities=5,
             )
 
         assert "Price must be non-negative" in str(exc_info.value)
@@ -144,7 +144,7 @@ class TestVehicleData:
                 days_on_lot=-5,
                 mileage=50000,
                 total_vdps=150,
-                sales_opportunities=5
+                sales_opportunities=5,
             )
 
         assert "Days on lot must be non-negative" in str(exc_info.value)
@@ -162,7 +162,7 @@ class TestVehicleData:
                 days_on_lot=25,
                 mileage=-1000,
                 total_vdps=150,
-                sales_opportunities=5
+                sales_opportunities=5,
             )
 
         assert "Mileage must be non-negative" in str(exc_info.value)
@@ -174,9 +174,7 @@ class TestRiskAssessment:
     def test_valid_risk_assessment(self):
         """Test creation of valid risk assessment."""
         assessment = RiskAssessment(
-            summary="Test vehicle summary",
-            risk_score=5,
-            reasoning="Test reasoning"
+            summary="Test vehicle summary", risk_score=5, reasoning="Test reasoning"
         )
 
         assert assessment.summary == "Test vehicle summary"
@@ -188,31 +186,23 @@ class TestRiskAssessment:
         # Test lower bound
         with pytest.raises(ValidationError):
             RiskAssessment(
-                summary="Test summary",
-                risk_score=0,
-                reasoning="Test reasoning"
+                summary="Test summary", risk_score=0, reasoning="Test reasoning"
             )
 
         # Test upper bound
         with pytest.raises(ValidationError):
             RiskAssessment(
-                summary="Test summary",
-                risk_score=11,
-                reasoning="Test reasoning"
+                summary="Test summary", risk_score=11, reasoning="Test reasoning"
             )
 
         # Test valid bounds
         assessment_low = RiskAssessment(
-            summary="Test summary",
-            risk_score=1,
-            reasoning="Test reasoning"
+            summary="Test summary", risk_score=1, reasoning="Test reasoning"
         )
         assert assessment_low.risk_score == 1
 
         assessment_high = RiskAssessment(
-            summary="Test summary",
-            risk_score=10,
-            reasoning="Test reasoning"
+            summary="Test summary", risk_score=10, reasoning="Test reasoning"
         )
         assert assessment_high.risk_score == 10
 
@@ -255,7 +245,7 @@ class TestRiskFactors:
             mileage_impact=-1,
             sales_opportunities_impact=1,
             total_adjustments=1,
-            final_score=6
+            final_score=6,
         )
 
         assert factors.days_on_lot_impact == -1
@@ -278,7 +268,7 @@ class TestRiskFactors:
                 mileage_impact=0,
                 sales_opportunities_impact=0,
                 total_adjustments=0,
-                final_score=0
+                final_score=0,
             )
 
         # Test upper bound
@@ -290,7 +280,7 @@ class TestRiskFactors:
                 mileage_impact=0,
                 sales_opportunities_impact=0,
                 total_adjustments=0,
-                final_score=11
+                final_score=11,
             )
 
 

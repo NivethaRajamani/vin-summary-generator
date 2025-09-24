@@ -34,7 +34,7 @@ class TestRiskEngine:
             days_on_lot=10,  # Low days on lot
             mileage=15000,  # Low mileage for age
             total_vdps=250,  # High views
-            sales_opportunities=15  # Many opportunities
+            sales_opportunities=15,  # Many opportunities
         )
 
     @pytest.fixture
@@ -50,7 +50,7 @@ class TestRiskEngine:
             days_on_lot=60,  # High days on lot
             mileage=120000,  # High mileage for age
             total_vdps=30,  # Low views
-            sales_opportunities=1  # Few opportunities
+            sales_opportunities=1,  # Few opportunities
         )
 
     @pytest.fixture
@@ -66,7 +66,7 @@ class TestRiskEngine:
             days_on_lot=5,  # Very new
             mileage=0,  # New car mileage
             total_vdps=100,  # Moderate views
-            sales_opportunities=3  # Moderate opportunities
+            sales_opportunities=3,  # Moderate opportunities
         )
 
     def test_calculate_days_on_lot_impact(self, risk_engine):
@@ -129,7 +129,7 @@ class TestRiskEngine:
             days_on_lot=25,
             mileage=30000,  # Below 12k/year average
             total_vdps=100,
-            sales_opportunities=5
+            sales_opportunities=5,
         )
         assert risk_engine._calculate_mileage_impact(vehicle_low_mileage) == -1
 
@@ -144,7 +144,7 @@ class TestRiskEngine:
             days_on_lot=25,
             mileage=100000,  # Above 12k/year average
             total_vdps=100,
-            sales_opportunities=5
+            sales_opportunities=5,
         )
         assert risk_engine._calculate_mileage_impact(vehicle_high_mileage) == 1
 
@@ -173,7 +173,7 @@ class TestRiskEngine:
             days_on_lot=150,  # High days on lot
             mileage=50000,
             total_vdps=100,
-            sales_opportunities=5
+            sales_opportunities=5,
         )
 
         adjustment = risk_engine._handle_missing_data_adjustments(vehicle_zero_price)
@@ -228,9 +228,10 @@ class TestRiskEngine:
         assert "Accord" in summary
 
         # Should contain market analysis
-        assert any(term in summary.lower() for term in [
-            "priced", "engagement", "risk", "investment", "position"
-        ])
+        assert any(
+            term in summary.lower()
+            for term in ["priced", "engagement", "risk", "investment", "position"]
+        )
 
     def test_generate_reasoning_content(self, risk_engine, sample_vehicle_low_risk):
         """Test that generated reasoning contains expected content."""
@@ -258,7 +259,7 @@ class TestRiskEngine:
             days_on_lot=5,  # Very low
             mileage=0,  # New
             total_vdps=500,  # Very high views
-            sales_opportunities=20  # Many opportunities
+            sales_opportunities=20,  # Many opportunities
         )
 
         factors = risk_engine.calculate_risk_factors(extreme_low_risk)
@@ -275,7 +276,7 @@ class TestRiskEngine:
             days_on_lot=200,  # Very high
             mileage=200000,  # Very high mileage
             total_vdps=5,  # Very low views
-            sales_opportunities=0  # No opportunities
+            sales_opportunities=0,  # No opportunities
         )
 
         factors = risk_engine.calculate_risk_factors(extreme_high_risk)

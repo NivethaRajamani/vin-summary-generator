@@ -24,7 +24,7 @@ class TestLLMService:
             days_on_lot=25,
             mileage=50000,
             total_vdps=150,
-            sales_opportunities=5
+            sales_opportunities=5,
         )
 
     @pytest.fixture
@@ -38,7 +38,7 @@ class TestLLMService:
             sales_opportunities_impact=0,
             baseline_score=5,
             total_adjustments=-3,
-            final_score=4
+            final_score=4,
         )
 
     def test_llm_service_init_with_api_key(self):
@@ -80,7 +80,9 @@ class TestLLMService:
     def test_generate_fallback_assessment(self, sample_vehicle, sample_risk_factors):
         """Test fallback assessment generation."""
         service = LLMService(api_key="test-key")
-        result = service._generate_fallback_assessment(sample_vehicle, sample_risk_factors)
+        result = service._generate_fallback_assessment(
+            sample_vehicle, sample_risk_factors
+        )
 
         # Check required fields
         assert "summary" in result
@@ -100,18 +102,18 @@ class TestLLMService:
         assert "Honda" in result["summary"]
         assert "Accord" in result["summary"]
 
-    @patch('anthropic.Anthropic')
+    @patch("anthropic.Anthropic")
     def test_generate_risk_assessment_success(
         self, mock_anthropic, sample_vehicle, sample_risk_factors
     ):
         """Test successful LLM risk assessment generation."""
         # Mock Anthropic response
         mock_content = Mock()
-        mock_content.text = '''{
+        mock_content.text = """{
             "summary": "This 2018 Honda Accord represents a moderate market position.",
             "risk_score": 4,
             "reasoning": "Vehicle shows balanced risk factors with good pricing."
-        }'''
+        }"""
 
         mock_response = Mock()
         mock_response.content = [mock_content]
@@ -127,11 +129,17 @@ class TestLLMService:
         mock_client.messages.create.assert_called_once()
 
         # Check result
-        assert result["summary"] == "This 2018 Honda Accord represents a moderate market position."
+        assert (
+            result["summary"]
+            == "This 2018 Honda Accord represents a moderate market position."
+        )
         assert result["risk_score"] == 4
-        assert result["reasoning"] == "Vehicle shows balanced risk factors with good pricing."
+        assert (
+            result["reasoning"]
+            == "Vehicle shows balanced risk factors with good pricing."
+        )
 
-    @patch('anthropic.Anthropic')
+    @patch("anthropic.Anthropic")
     def test_generate_risk_assessment_api_failure(
         self, mock_anthropic, sample_vehicle, sample_risk_factors
     ):
@@ -150,7 +158,7 @@ class TestLLMService:
         assert "reasoning" in result
         assert 1 <= result["risk_score"] <= 10
 
-    @patch('anthropic.Anthropic')
+    @patch("anthropic.Anthropic")
     def test_generate_risk_assessment_invalid_json(
         self, mock_anthropic, sample_vehicle, sample_risk_factors
     ):
@@ -174,18 +182,18 @@ class TestLLMService:
         assert "risk_score" in result
         assert "reasoning" in result
 
-    @patch('anthropic.Anthropic')
+    @patch("anthropic.Anthropic")
     def test_generate_risk_assessment_risk_score_bounds(
         self, mock_anthropic, sample_vehicle, sample_risk_factors
     ):
         """Test that risk scores are properly bounded."""
         # Mock Anthropic response with out-of-bounds risk score
         mock_content = Mock()
-        mock_content.text = '''{
+        mock_content.text = """{
             "summary": "Test summary",
             "risk_score": 15,
             "reasoning": "Test reasoning"
-        }'''
+        }"""
 
         mock_response = Mock()
         mock_response.content = [mock_content]
@@ -200,7 +208,7 @@ class TestLLMService:
         # Risk score should be clamped to 10
         assert result["risk_score"] == 10
 
-    @patch('anthropic.Anthropic')
+    @patch("anthropic.Anthropic")
     def test_test_connection_success(self, mock_anthropic):
         """Test successful connection test."""
         mock_response = Mock()
@@ -211,7 +219,7 @@ class TestLLMService:
         service = LLMService(api_key="test-key")
         assert service.test_connection() is True
 
-    @patch('anthropic.Anthropic')
+    @patch("anthropic.Anthropic")
     def test_test_connection_failure(self, mock_anthropic):
         """Test failed connection test."""
         mock_client = Mock()

@@ -11,7 +11,12 @@ from .risk_engine import RiskEngine
 class VinAnalyzer:
     """Main service for VIN analysis combining data loading and risk assessment."""
 
-    def __init__(self, csv_file_path: str, use_llm: bool = True, anthropic_api_key: Optional[str] = None):
+    def __init__(
+        self,
+        csv_file_path: str,
+        use_llm: bool = True,
+        anthropic_api_key: Optional[str] = None,
+    ):
         """
         Initialize VIN analyzer with CSV data source.
 
@@ -21,7 +26,9 @@ class VinAnalyzer:
             anthropic_api_key: Anthropic API key (optional, can use env var)
         """
         self.data_loader = DataLoader(csv_file_path)
-        self.risk_engine = RiskEngine(use_llm=use_llm, anthropic_api_key=anthropic_api_key)
+        self.risk_engine = RiskEngine(
+            use_llm=use_llm, anthropic_api_key=anthropic_api_key
+        )
 
     def analyze_vin(self, vin: str) -> RiskAssessment:
         """
@@ -43,7 +50,7 @@ class VinAnalyzer:
         risk_assessment = self.risk_engine.assess_risk(vehicle_data)
 
         return risk_assessment
-    
+
     def get_vehicle_data(self, vin: str) -> VehicleData:
         """
         Get raw vehicle data by VIN.
@@ -68,7 +75,7 @@ class VinAnalyzer:
                 "total_vehicles": 0,
                 "makes": [],
                 "year_range": None,
-                "price_range": None
+                "price_range": None,
             }
 
         makes = list(set(v.make for v in vehicles))
@@ -80,13 +87,13 @@ class VinAnalyzer:
             "makes": sorted(makes),
             "year_range": {
                 "min": min(years) if years else None,
-                "max": max(years) if years else None
+                "max": max(years) if years else None,
             },
             "price_range": {
                 "min": min(prices) if prices else None,
                 "max": max(prices) if prices else None,
-                "avg": sum(prices) / len(prices) if prices else None
-            }
+                "avg": sum(prices) / len(prices) if prices else None,
+            },
         }
 
     def validate_vin_exists(self, vin: str) -> bool:
@@ -110,8 +117,8 @@ class VinAnalyzer:
         cls,
         project_root: Optional[str] = None,
         use_llm: bool = True,
-        anthropic_api_key: Optional[str] = None
-    ) -> 'VinAnalyzer':
+        anthropic_api_key: Optional[str] = None,
+    ) -> "VinAnalyzer":
         """
         Create VinAnalyzer using the sample data CSV file.
 
@@ -135,7 +142,7 @@ class VinAnalyzer:
                     return cls(
                         str(sample_data_path),
                         use_llm=use_llm,
-                        anthropic_api_key=anthropic_api_key
+                        anthropic_api_key=anthropic_api_key,
                     )
                 current_path = current_path.parent
 
@@ -144,10 +151,10 @@ class VinAnalyzer:
             sample_data_path = Path(project_root) / "sample_data.csv"
             if not sample_data_path.exists():
                 raise FileNotFoundError(
-                f"Sample data file not found: {sample_data_path}"
-            )
+                    f"Sample data file not found: {sample_data_path}"
+                )
             return cls(
                 str(sample_data_path),
                 use_llm=use_llm,
-                anthropic_api_key=anthropic_api_key
+                anthropic_api_key=anthropic_api_key,
             )

@@ -19,47 +19,47 @@ class TestAPIIntegration:
         """Create sample CSV data for testing."""
         return [
             {
-                'VIN': '1HGCM82633A123456',
-                'Year': '2018',
-                'Make': 'HONDA',
-                'Model': 'ACCORD',
-                'Current price': '$25,000',
-                'Current price to market %': '95%',
-                'DOL': '25',
-                'Mileage': '50,000',
-                'Total VDPs (lifetime)': '150',
-                'Total sales opportunities (lifetime)': '5'
+                "VIN": "1HGCM82633A123456",
+                "Year": "2018",
+                "Make": "HONDA",
+                "Model": "ACCORD",
+                "Current price": "$25,000",
+                "Current price to market %": "95%",
+                "DOL": "25",
+                "Mileage": "50,000",
+                "Total VDPs (lifetime)": "150",
+                "Total sales opportunities (lifetime)": "5",
             },
             {
-                'VIN': '2HGCM82633A123457',
-                'Year': '2019',
-                'Make': 'TOYOTA',
-                'Model': 'CAMRY',
-                'Current price': '$30,500',
-                'Current price to market %': '105%',
-                'DOL': '45',
-                'Mileage': '30,000',
-                'Total VDPs (lifetime)': '75',
-                'Total sales opportunities (lifetime)': '2'
+                "VIN": "2HGCM82633A123457",
+                "Year": "2019",
+                "Make": "TOYOTA",
+                "Model": "CAMRY",
+                "Current price": "$30,500",
+                "Current price to market %": "105%",
+                "DOL": "45",
+                "Mileage": "30,000",
+                "Total VDPs (lifetime)": "75",
+                "Total sales opportunities (lifetime)": "2",
             },
             {
-                'VIN': '3HGCM82633A123458',
-                'Year': '2020',
-                'Make': 'NISSAN',
-                'Model': 'ALTIMA',
-                'Current price': '$22,000',
-                'Current price to market %': '98%',
-                'DOL': '60',
-                'Mileage': '35,000',
-                'Total VDPs (lifetime)': '25',
-                'Total sales opportunities (lifetime)': '1'
-            }
+                "VIN": "3HGCM82633A123458",
+                "Year": "2020",
+                "Make": "NISSAN",
+                "Model": "ALTIMA",
+                "Current price": "$22,000",
+                "Current price to market %": "98%",
+                "DOL": "60",
+                "Mileage": "35,000",
+                "Total VDPs (lifetime)": "25",
+                "Total sales opportunities (lifetime)": "1",
+            },
         ]
 
     @pytest.fixture
     def temp_csv_file(self, sample_csv_data):
         """Create temporary CSV file for testing."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
             fieldnames = sample_csv_data[0].keys()
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()

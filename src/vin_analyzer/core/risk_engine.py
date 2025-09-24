@@ -41,27 +41,27 @@ class RiskEngine:
         if days_on_lot < 15:
             return -2  # Low risk
         elif days_on_lot <= 45:
-            return 0   # Moderate risk
+            return 0  # Moderate risk
         else:
-            return 2   # High risk
+            return 2  # High risk
 
     def _calculate_price_to_market_impact(self, price_to_market_percent: float) -> int:
         """Calculate risk impact from price to market percentage."""
         if price_to_market_percent <= 95:
             return -2  # Below market, positive indicator
         elif 96 <= price_to_market_percent <= 105:
-            return 0   # At/near market
+            return 0  # At/near market
         else:
-            return 2   # Overpriced, negative indicator
+            return 2  # Overpriced, negative indicator
 
     def _calculate_vdp_views_impact(self, vdp_views: int) -> int:
         """Calculate risk impact from VDP views."""
         if vdp_views > 200:
             return -1  # High views reduce risk
         elif 50 <= vdp_views <= 200:
-            return 0   # Moderate views are neutral
+            return 0  # Moderate views are neutral
         else:
-            return 1   # Low views increase risk
+            return 1  # Low views increase risk
 
     def _calculate_mileage_impact(self, vehicle: VehicleData) -> int:
         """Calculate risk impact from mileage relative to vehicle age."""
@@ -87,9 +87,9 @@ class RiskEngine:
         if sales_opportunities > 10:
             return -1  # Many opportunities reduce risk
         elif sales_opportunities <= 2:
-            return 1   # Few opportunities increase risk
+            return 1  # Few opportunities increase risk
         else:
-            return 0   # Moderate opportunities are neutral
+            return 0  # Moderate opportunities are neutral
 
     def _handle_missing_data_adjustments(self, vehicle: VehicleData) -> int:
         """Apply adjustments for missing or invalid data."""
@@ -126,12 +126,12 @@ class RiskEngine:
 
         # Calculate total adjustments
         total_adjustments = (
-            days_on_lot_impact +
-            price_to_market_impact +
-            vdp_views_impact +
-            mileage_impact +
-            sales_opportunities_impact +
-            missing_data_adjustment
+            days_on_lot_impact
+            + price_to_market_impact
+            + vdp_views_impact
+            + mileage_impact
+            + sales_opportunities_impact
+            + missing_data_adjustment
         )
 
         # Calculate final score with clamping
@@ -146,9 +146,9 @@ class RiskEngine:
             sales_opportunities_impact=sales_opportunities_impact,
             baseline_score=self.BASELINE_SCORE,
             total_adjustments=total_adjustments,
-            final_score=final_score
+            final_score=final_score,
         )
-    
+
     def _generate_summary(self, vehicle: VehicleData, risk_factors: RiskFactors) -> str:
         """Generate human-readable summary of vehicle's market position."""
         year = vehicle.year
@@ -306,7 +306,7 @@ class RiskEngine:
                 return RiskAssessment(
                     summary=llm_output["summary"],
                     risk_score=llm_output["risk_score"],
-                    reasoning=llm_output["reasoning"]
+                    reasoning=llm_output["reasoning"],
                 )
             except Exception as e:
                 print(f"LLM generation failed: {e}. Using fallback.")
@@ -316,7 +316,5 @@ class RiskEngine:
         reasoning = self._generate_reasoning(vehicle, risk_factors)
 
         return RiskAssessment(
-            summary=summary,
-            risk_score=risk_factors.final_score,
-            reasoning=reasoning
+            summary=summary, risk_score=risk_factors.final_score, reasoning=reasoning
         )

@@ -32,14 +32,14 @@ def set_analyzer(vin_analyzer: VinAnalyzer) -> None:
                     "example": {
                         "summary": "This 2018 Honda Accord is priced slightly above market value but shows strong online engagement, indicating healthy buyer interest despite moderate days on lot.",
                         "risk_score": 4,
-                        "reasoning": "Days on lot (25) is within normal range (neutral). Price is 5% above market (+2). VDP views are high (-1). Mileage is below average (-1). Overall score = 5 baseline +0 (days_on_lot) +2 (price_to_market) -1 (views) -1 (mileage) = 4."
+                        "reasoning": "Days on lot (25) is within normal range (neutral). Price is 5% above market (+2). VDP views are high (-1). Mileage is below average (-1). Overall score = 5 baseline +0 (days_on_lot) +2 (price_to_market) -1 (views) -1 (mileage) = 4.",
                     }
                 }
-            }
+            },
         },
         404: {"description": "VIN not found in database"},
-        422: {"description": "Invalid VIN format"}
-    }
+        422: {"description": "Invalid VIN format"},
+    },
 )
 async def analyze_vin(request: VinRequest) -> RiskAssessment:
     """
@@ -55,21 +55,18 @@ async def analyze_vin(request: VinRequest) -> RiskAssessment:
     if analyzer is None:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Service not properly initialized"
+            detail="Service not properly initialized",
         )
 
     try:
         assessment = analyzer.analyze_vin(request.vin)
         return assessment
     except VehicleNotFoundError as e:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=str(e)
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Internal server error: {str(e)}"
+            detail=f"Internal server error: {str(e)}",
         )
 
 
@@ -79,15 +76,15 @@ async def analyze_vin(request: VinRequest) -> RiskAssessment:
     description="Check if the service is running and operational.",
     responses={
         200: {"description": "Service is healthy"},
-        503: {"description": "Service unavailable"}
-    }
+        503: {"description": "Service unavailable"},
+    },
 )
 async def health_check():
     """Health check endpoint to verify service status."""
     if analyzer is None:
         return JSONResponse(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            content={"status": "unhealthy", "message": "Service not initialized"}
+            content={"status": "unhealthy", "message": "Service not initialized"},
         )
 
     try:
@@ -95,15 +92,12 @@ async def health_check():
         return {
             "status": "healthy",
             "message": "Service is operational",
-            "database_stats": stats
+            "database_stats": stats,
         }
     except Exception as e:
         return JSONResponse(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            content={
-                "status": "unhealthy",
-                "message": f"Database error: {str(e)}"
-            }
+            content={"status": "unhealthy", "message": f"Database error: {str(e)}"},
         )
 
 
@@ -113,27 +107,27 @@ async def health_check():
     description="Get statistics about the loaded vehicle database.",
     responses={
         200: {"description": "Database statistics"},
-        503: {"description": "Service unavailable"}
-    }
+        503: {"description": "Service unavailable"},
+    },
 )
 async def get_database_stats():
     """Get statistics about the loaded vehicle database."""
     if analyzer is None:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Service not properly initialized"
+            detail="Service not properly initialized",
         )
 
     try:
         stats = analyzer.get_database_stats()
         return {
             "database_statistics": stats,
-            "message": "Database statistics retrieved successfully"
+            "message": "Database statistics retrieved successfully",
         }
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error retrieving statistics: {str(e)}"
+            detail=f"Error retrieving statistics: {str(e)}",
         )
 
 
@@ -143,8 +137,8 @@ async def get_database_stats():
     description="Check if a VIN exists in the database without performing full analysis.",
     responses={
         200: {"description": "VIN validation result"},
-        422: {"description": "Invalid VIN format"}
-    }
+        422: {"description": "Invalid VIN format"},
+    },
 )
 async def validate_vin(request: VinRequest):
     """
@@ -159,7 +153,7 @@ async def validate_vin(request: VinRequest):
     if analyzer is None:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Service not properly initialized"
+            detail="Service not properly initialized",
         )
 
     try:
@@ -167,10 +161,12 @@ async def validate_vin(request: VinRequest):
         return {
             "vin": request.vin,
             "exists": exists,
-            "message": "VIN found in database" if exists else "VIN not found in database"
+            "message": "VIN found in database"
+            if exists
+            else "VIN not found in database",
         }
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error validating VIN: {str(e)}"
+            detail=f"Error validating VIN: {str(e)}",
         )
