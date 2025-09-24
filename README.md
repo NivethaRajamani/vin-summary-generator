@@ -149,6 +149,22 @@ http://localhost:8000
 
 Analyze a VIN and get risk assessment.
 
+**Request Body**:
+```json
+{
+  "vin": "1HGCM82633A123456"
+}
+```
+
+**Response**:
+```json
+{
+  "summary": "This 2018 Honda Accord is priced slightly above market value but shows strong online engagement, indicating healthy buyer interest despite moderate days on lot.",
+  "risk_score": 4,
+  "reasoning": "Days on lot (25) is within normal range (neutral). Price is 5% above market (+2). VDP views are high (-1). Mileage is below average (-1). Overall score = 5 baseline +0 (days_on_lot) +2 (price_to_market) -1 (views) -1 (mileage) = 4."
+}
+```
+
 <img width="783" height="484" alt="image" src="https://github.com/user-attachments/assets/4e7a1422-fd50-4dae-b16a-28b52f6f3fcb" />
 
 <img width="1753" height="386" alt="image" src="https://github.com/user-attachments/assets/5d1b4169-bc7d-4979-b50a-076f0a505c8f" />
@@ -174,6 +190,12 @@ Check if a VIN exists in the database.
   "message": "VIN found in database"
 }
 ```
+<img width="618" height="470" alt="image" src="https://github.com/user-attachments/assets/ac30a73e-5bef-4eaa-8264-b0960956f8e0" />
+<img width="580" height="296" alt="image" src="https://github.com/user-attachments/assets/e74449cc-26f7-406b-a063-d6cc1d3fe4a1" />
+
+<img width="336" height="216" alt="image" src="https://github.com/user-attachments/assets/f30fd29a-a153-4e63-82f8-6f2a8096df1f" />
+<img width="537" height="306" alt="image" src="https://github.com/user-attachments/assets/63428281-0504-40a4-aa64-ed02ffbaff05" />
+
 
 #### 3. Health Check
 **GET** `/api/v1/health`
@@ -193,6 +215,11 @@ Check service health and get database statistics.
   }
 }
 ```
+<img width="495" height="256" alt="image" src="https://github.com/user-attachments/assets/3067c1f6-5010-457d-97ca-c06129681f38" />
+
+<img width="564" height="705" alt="image" src="https://github.com/user-attachments/assets/2063d9f2-3302-4793-aa36-9bc2f3d0d390" />
+<img width="403" height="256" alt="image" src="https://github.com/user-attachments/assets/c65dc0a8-b9a5-45e7-95a1-9dca4d57cdb9" />
+
 
 #### 4. Database Statistics
 **GET** `/api/v1/stats`
@@ -211,6 +238,12 @@ Get detailed database statistics.
   "message": "Database statistics retrieved successfully"
 }
 ```
+
+<img width="469" height="274" alt="image" src="https://github.com/user-attachments/assets/f71764c7-73e3-4d3e-a959-96ca752948bc" />
+
+<img width="740" height="595" alt="image" src="https://github.com/user-attachments/assets/b0f47978-ba11-446c-8afb-2b656b09dbcc" />
+<img width="645" height="236" alt="image" src="https://github.com/user-attachments/assets/1175ad30-d27f-4fa8-ac2e-f4bb8d2a4f40" />
+
 
 ## Usage Examples
 
